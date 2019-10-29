@@ -21,6 +21,7 @@ let ADD_TASK_FAILURE_TITLE = "FAILED"
 let ADD_TASK_FAILURE_MESSAGE = "Task already exists. Please try again!!"
 let ALERT_ACTION_TITLE = "OK"
 let ALERT_CANCEL_ACTION_BUTTON_TITLE = "CANCEL"
+let SEARCHBAR_PLACEHOLDER = "Search Tasks"
 
 // All database related constants
 
@@ -32,4 +33,4 @@ enum TASK: String {
 }
 let SAVING_ERROR_MESSAGE = "Saving Error: "
 let FETCHING_ERROR_MESSAGE = "Fetching Error: "
-
+let NAME_FILTER_QUERY = "name CONTAINS %@"

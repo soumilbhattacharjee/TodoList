@@ -9,16 +9,22 @@
 import UIKit
 
 class TodoViewController: UITableViewController {
-    let viewModel = TodoViewModel()
+    private let viewModel = TodoViewModel()
+    private let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = SEARCHBAR_PLACEHOLDER
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        searchController.searchResultsUpdater = self
         viewModel.getDataFromDb()
     }
     
     // MARK: - Table view data source methods
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.taskArray.count
     }
@@ -57,7 +63,7 @@ class TodoViewController: UITableViewController {
      - Parameter keys: sender
      - Returns: No Parameter
      */
-    @IBAction func addNewTaskAction(_ sender: UIBarButtonItem) {
+    @IBAction private func addNewTaskAction(_ sender: UIBarButtonItem) {
         showTaskEntryView()
     }
     
@@ -65,14 +71,11 @@ class TodoViewController: UITableViewController {
      - Parameter keys: sender
      - Returns: No Parameter
      */
-    @IBAction func reorderTasksAction(_ sender: UIBarButtonItem) {
-        if sender.title == REORDER_BUTTON_TITLE {
-            tableView.isEditing = true
-            sender.title = DONE_BUTTON_TITLE
-        } else {
-            tableView.isEditing = false
-            sender.title = REORDER_BUTTON_TITLE
-        }
+    @IBAction private func reorderTasksAction(_ sender: UIBarButtonItem) {
+        guard let title = sender.title else {return}
+        let reorder = viewModel.prepareForReorder(with: title)
+        sender.title = reorder.title
+        tableView.isEditing = reorder.editingStatus
     }
     
     //MARK:- Alert View actions
@@ -81,7 +84,7 @@ class TodoViewController: UITableViewController {
      - Parameter keys: No Parameter
      - Returns: No Parameter
      */
-    func showTaskEntryView() {
+    private func showTaskEntryView() {
         var textfield = UITextField()
         let alert = UIAlertController(title: ADD_TASK_ALERT_TITLE, message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
@@ -94,7 +97,7 @@ class TodoViewController: UITableViewController {
                 } else {
                     self.showAlertView(name: ADD_TASK_FAILURE_TITLE, description: ADD_TASK_FAILURE_MESSAGE)
                 }
-            self.tableView.reloadData()
+                self.tableView.reloadData()
             }
         }
         let cancelAction = UIAlertAction(title: ALERT_CANCEL_ACTION_BUTTON_TITLE, style: .destructive, handler: nil)
@@ -107,10 +110,34 @@ class TodoViewController: UITableViewController {
      - Parameter keys: name, description
      - Returns: No Parameter
      */
-    func showAlertView(name: String, description: String) {
+    private func showAlertView(name: String, description: String) {
         let alert = UIAlertController(title: name, message: description, preferredStyle: .alert)
         let alertAction = UIAlertAction(title: ALERT_ACTION_TITLE, style: .default, handler: nil)
         alert.addAction(alertAction)
         present(alert, animated: true, completion: nil)
+    }
+}
+
+
+extension TodoViewController: UISearchResultsUpdating {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationItem.hidesSearchBarWhenScrolling = true
+    }
+    
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        if searchController.isActive {
+            viewModel.getSearchResult(for: searchController.searchBar.text ?? "")
+        } else {
+            viewModel.getDataFromDb()
+        }
+        tableView.reloadData()
     }
 }

@@ -7,11 +7,12 @@
 //
 
 import UIKit
-import CoreData
 
 class TodoViewModel {
     var taskArray = [Task]()
     let dataModel = DataManager()
+    
+    //    MARK:- DB related methods
     
     /* Description: Add newTask to local Array
      - Parameter keys: newTaskName
@@ -81,5 +82,28 @@ class TodoViewModel {
             task.name == name
         }
         return task.isEmpty ? true : false
+    }
+    
+    //     MARK:- UI related Logics
+    
+    /* Description: Preparing the TodoVC for reorder tasks
+     - Parameter keys: title
+     - Returns: title: String, editingStatus: Bool
+     */
+    func prepareForReorder(with title: String) -> (title: String, editingStatus: Bool) {
+        if title == REORDER_BUTTON_TITLE {
+            return (DONE_BUTTON_TITLE, true)
+        } else {
+            return (REORDER_BUTTON_TITLE, false)
+        }
+    }
+    
+    /* Description: Gtting search results
+     - Parameter keys: searchKey
+     - Returns: title: No Parameter
+     */
+    func getSearchResult(for searchKey: String) {
+        guard let tasks = dataModel.getSearchResultFromDb(searchKey: searchKey) else {return}
+        taskArray = tasks
     }
 }
