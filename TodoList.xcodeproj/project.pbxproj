@@ -14,6 +14,7 @@
 		9D7DEF6A23642DBE00386058 /* TodoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7DEF6923642DBE00386058 /* TodoViewModel.swift */; };
 		9D7DEF6D23642DE800386058 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7DEF6C23642DE800386058 /* DataManager.swift */; };
 		9D7DEF6F2364353400386058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7DEF6E2364353400386058 /* AppDelegate.swift */; };
+		9DB8A3342367EC2D00C32317 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB8A3332367EC2D00C32317 /* Constants.swift */; };
 		9DFAAD602366CBC0002D4330 /* Task.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAAD5E2366CBC0002D4330 /* Task.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		9D7DEF6923642DBE00386058 /* TodoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoViewModel.swift; sourceTree = "<group>"; };
 		9D7DEF6C23642DE800386058 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		9D7DEF6E2364353400386058 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9DB8A3332367EC2D00C32317 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9DFAAD5F2366CBC0002D4330 /* Task.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Task.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				9D7DEF6E2364353400386058 /* AppDelegate.swift */,
+				9DB8A3332367EC2D00C32317 /* Constants.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 				9D7DEF6323642C7400386058 /* TodoViewController.swift in Sources */,
 				9DFAAD602366CBC0002D4330 /* Task.xcdatamodeld in Sources */,
 				9D7DEF6D23642DE800386058 /* DataManager.swift in Sources */,
+				9DB8A3342367EC2D00C32317 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

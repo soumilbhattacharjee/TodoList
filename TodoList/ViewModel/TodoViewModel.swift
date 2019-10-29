@@ -3,7 +3,7 @@
 //  TodoList
 //
 //  Created by Soumil on 26/10/19.
-//  Copyright © 2019 OIT. All rights reserved.
+//  Copyright © 2019 Soumil. All rights reserved.
 //
 
 import UIKit
@@ -19,12 +19,8 @@ class TodoViewModel {
      */
     func addNewTaskToArray(newTaskName: String) -> Bool {
         if checkIfTaskExists(name: newTaskName) {
-            let newTask = Task(context: dataModel.context)
-            newTask.name = newTaskName
-            newTask.isDone = false
-            newTask.indexNo = Int32(taskArray.count)
+            let newTask = dataModel.createNewTask(with: newTaskName, and: Int32(taskArray.count))
             taskArray.append(newTask)
-            dataModel.saveToDb()
             return true
         }
         return false
@@ -70,11 +66,10 @@ class TodoViewModel {
      - Returns: No Parameter
      */
     func changeTaskOrder(from initialIndex: Int, to finalIndex: Int) {
-        let initialTask = taskArray[initialIndex]
-        let finalTask = taskArray[finalIndex]
-        dataModel.changeTaskOrder(from: initialTask, to: finalTask)
+        let task = taskArray[initialIndex]
+        dataModel.changeTaskOrder(from: initialIndex, to: finalIndex, within: taskArray)
         taskArray.remove(at: initialIndex)
-        taskArray.insert(initialTask, at: finalIndex)
+        taskArray.insert(task, at: finalIndex)
     }
     
     /* Description: Checking if the same task exists

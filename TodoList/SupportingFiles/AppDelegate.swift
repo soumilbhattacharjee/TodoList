@@ -3,7 +3,7 @@
 //  TodoList
 //
 //  Created by Soumil on 17/10/19.
-//  Copyright © 2019 OIT. All rights reserved.
+//  Copyright © 2019 Soumil. All rights reserved.
 //
 
 import UIKit
