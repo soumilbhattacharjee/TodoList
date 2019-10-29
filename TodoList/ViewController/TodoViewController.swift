@@ -15,7 +15,6 @@ class TodoViewController: UITableViewController {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         viewModel.getDataFromDb()
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
     // MARK: - Table view data source methods

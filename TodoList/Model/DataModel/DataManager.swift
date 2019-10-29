@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class DataManager {
-   private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     /* Description: Add taskArray to DB
      - Parameter keys: No Parameter
@@ -68,16 +68,10 @@ class DataManager {
      */
     func changeTaskOrder(from initialIndex: Int, to finalIndex: Int, within tasks: [Task]) {
         let startIndex = initialIndex < finalIndex ? initialIndex + 1 : initialIndex - 1
-        if startIndex < finalIndex {
-            for index in startIndex...finalIndex {
-                let task = tasks[index]
-                task.indexNo = initialIndex < finalIndex ? Int32(task.indexNo - 1) : Int32(task.indexNo + 1)
-            }
-        } else {
-            for index in finalIndex...startIndex {
-                let task = tasks[index]
-                task.indexNo = initialIndex < finalIndex ? Int32(task.indexNo - 1) : Int32(task.indexNo + 1)
-            }
+        let range = startIndex < finalIndex ? startIndex...finalIndex : finalIndex...startIndex
+        for index in range {
+            let task = tasks[index]
+            task.indexNo = initialIndex < finalIndex ? Int32(task.indexNo - 1) : Int32(task.indexNo + 1)
         }
         let initialTask = tasks[initialIndex]
         initialTask.setValue(Int32(finalIndex), forKey: TASK.INDEXNO.rawValue)
