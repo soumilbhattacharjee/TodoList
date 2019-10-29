@@ -3,7 +3,7 @@
 //  TodoList
 //
 //  Created by Soumil on 26/10/19.
-//  Copyright © 2019 OIT. All rights reserved.
+//  Copyright © 2019 Soumil. All rights reserved.
 //
 
 import UIKit
@@ -15,6 +15,7 @@ class TodoViewController: UITableViewController {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         viewModel.getDataFromDb()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
     // MARK: - Table view data source methods
@@ -24,7 +25,7 @@ class TodoViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: CELL_IDENTIFIRE, for: indexPath)
         let task = viewModel.taskArray[indexPath.row]
         cell.textLabel?.text = task.name
         cell.accessoryType = task.isDone ? .checkmark : .none
@@ -51,6 +52,8 @@ class TodoViewController: UITableViewController {
         }
     }
     
+    //MARK:- Button actions
+    
     /* Description: Add button action
      - Parameter keys: sender
      - Returns: No Parameter
@@ -64,14 +67,16 @@ class TodoViewController: UITableViewController {
      - Returns: No Parameter
      */
     @IBAction func reorderTasksAction(_ sender: UIBarButtonItem) {
-        if sender.title == "Reorder" {
+        if sender.title == REORDER_BUTTON_TITLE {
             tableView.isEditing = true
-            sender.title = "Done"
+            sender.title = DONE_BUTTON_TITLE
         } else {
             tableView.isEditing = false
-            sender.title = "Reorder"
+            sender.title = REORDER_BUTTON_TITLE
         }
     }
+    
+    //MARK:- Alert View actions
     
     /* Description: Show custom alert to add new task
      - Parameter keys: No Parameter
@@ -79,21 +84,23 @@ class TodoViewController: UITableViewController {
      */
     func showTaskEntryView() {
         var textfield = UITextField()
-        let alert = UIAlertController(title: "Add New Task", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: ADD_TASK_ALERT_TITLE, message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textfield = textField
         }
-        let alertAction = UIAlertAction(title: "Add", style: .default) { (addTask) in
-            if let text = textfield.text, text != "" {
+        let createAlertAction = UIAlertAction(title: ALERT_CREATE_TASK_BUTTON_TITLE, style: .default) { (addTask) in
+            if let text = textfield.text, !text.isEmpty {
                 if self.viewModel.addNewTaskToArray(newTaskName: text) {
-                    self.showAlertView(name: "Success", description: "New Task entry successful!!")
+                    self.showAlertView(name: ADD_TASK_SUCCESS_TITLE, description: ADD_TASK_SUCCESS_MESSAGE)
                 } else {
-                    self.showAlertView(name: "Error", description: "Task already exists. Please try again!!")
+                    self.showAlertView(name: ADD_TASK_FAILURE_TITLE, description: ADD_TASK_FAILURE_MESSAGE)
                 }
             self.tableView.reloadData()
             }
         }
-        alert.addAction(alertAction)
+        let cancelAction = UIAlertAction(title: ALERT_CANCEL_ACTION_BUTTON_TITLE, style: .destructive, handler: nil)
+        alert.addAction(createAlertAction)
+        alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
     }
     
@@ -103,7 +110,7 @@ class TodoViewController: UITableViewController {
      */
     func showAlertView(name: String, description: String) {
         let alert = UIAlertController(title: name, message: description, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        let alertAction = UIAlertAction(title: ALERT_ACTION_TITLE, style: .default, handler: nil)
         alert.addAction(alertAction)
         present(alert, animated: true, completion: nil)
     }

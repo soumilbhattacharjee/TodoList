@@ -3,26 +3,38 @@
 //  TodoList
 //
 //  Created by Soumil on 26/10/19.
-//  Copyright © 2019 OIT. All rights reserved.
+//  Copyright © 2019 Soumil. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
 class DataManager {
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+   private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     /* Description: Add taskArray to DB
      - Parameter keys: No Parameter
      - Returns: No Parameter
      */
     func saveToDb() {
-        // Add db save method
         do {
             try context.save()
         } catch {
-            print("Saving Error \(error)")
+            print(SAVING_ERROR_MESSAGE + "\(error)")
         }
+    }
+    
+    /* Description: Add newTask to DB
+     - Parameter keys: name, indexNo
+     - Returns: Task
+     */
+    func createNewTask(with name: String, and indexNo: Int32) -> Task {
+        let newTask = Task(context: context)
+        newTask.name = name
+        newTask.isDone = false
+        newTask.indexNo = indexNo
+        saveToDb()
+        return newTask
     }
     
     /* Description: Retrive taskArray from DB
@@ -30,14 +42,13 @@ class DataManager {
      - Returns: [Task]?
      */
     func getDataFromDb() -> [Task]? {
-        // Add db retrive method
         do {
-            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Task")
-            let sortDescriptor = NSSortDescriptor(key: "indexNo", ascending: true)
+            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: ENTITYNAME)
+            let sortDescriptor = NSSortDescriptor(key: TASK.INDEXNO.rawValue, ascending: true)
             request.sortDescriptors = [sortDescriptor]
             return try context.fetch(request) as? [Task]
         } catch {
-            print("Fetching Error \(error)")
+            print(FETCHING_ERROR_MESSAGE + "\(error)")
             return nil
         }
     }
@@ -55,10 +66,21 @@ class DataManager {
      - Parameter keys: initialTask, finalTask
      - Returns: No Parameter
      */
-    func changeTaskOrder(from initialTask: Task, to finalTask: Task) {
-        let tempindex = initialTask.indexNo
-        initialTask.setValue(finalTask.indexNo, forKey: "indexNo")
-        finalTask.setValue(tempindex, forKey: "indexNo")
+    func changeTaskOrder(from initialIndex: Int, to finalIndex: Int, within tasks: [Task]) {
+        let startIndex = initialIndex < finalIndex ? initialIndex + 1 : initialIndex - 1
+        if startIndex < finalIndex {
+            for index in startIndex...finalIndex {
+                let task = tasks[index]
+                task.indexNo = initialIndex < finalIndex ? Int32(task.indexNo - 1) : Int32(task.indexNo + 1)
+            }
+        } else {
+            for index in finalIndex...startIndex {
+                let task = tasks[index]
+                task.indexNo = initialIndex < finalIndex ? Int32(task.indexNo - 1) : Int32(task.indexNo + 1)
+            }
+        }
+        let initialTask = tasks[initialIndex]
+        initialTask.setValue(Int32(finalIndex), forKey: TASK.INDEXNO.rawValue)
         saveToDb()
     }
 }
