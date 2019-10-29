@@ -77,4 +77,22 @@ class DataManager {
         initialTask.setValue(Int32(finalIndex), forKey: TASK.INDEXNO.rawValue)
         saveToDb()
     }
+    
+    /* Description: Retrive search result from DB
+     - Parameter keys: searchKey
+     - Returns: [Task]?
+     */
+    func getSearchResultFromDb(searchKey: String) -> [Task]? {
+        do {
+            let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: ENTITYNAME)
+            let predicate = NSPredicate(format: NAME_FILTER_QUERY, searchKey)
+            let sortDescriptor = NSSortDescriptor(key: TASK.INDEXNO.rawValue, ascending: true)
+            request.sortDescriptors = [sortDescriptor]
+            request.predicate = predicate
+            return try context.fetch(request) as? [Task]
+        } catch {
+            print(FETCHING_ERROR_MESSAGE + "\(error)")
+            return nil
+        }
+    }
 }
