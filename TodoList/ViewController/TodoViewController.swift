@@ -15,11 +15,7 @@ class TodoViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = SEARCHBAR_PLACEHOLDER
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-        searchController.searchResultsUpdater = self
+        searchBarCustomization()
         viewModel.getDataFromDb()
     }
     
@@ -129,6 +125,21 @@ extension TodoViewController: UISearchResultsUpdating {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationItem.hidesSearchBarWhenScrolling = true
+    }
+    
+    /* Description: Customizing the searchbar and setting its delegate
+     - Parameter keys: No Parameter
+     - Returns: No Parameter
+     */
+    private func searchBarCustomization() {
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = SEARCHBAR_PLACEHOLDER
+        navigationItem.searchController = searchController
+        searchController.searchBar.showsCancelButton = false
+        definesPresentationContext = true
+        searchController.searchResultsUpdater = self
+        guard let searchView = searchController.searchBar.value(forKey: "searchField") as? UITextField else {return}
+            searchView.clearButtonMode = .never
     }
     
     // MARK: - UISearchResultsUpdating Delegate
