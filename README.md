@@ -1,2 +1,2 @@
 # TodoList
-Todo List is a very useful and easy to use app to keep your todo list checked
+Todo List is a very lite and easy to use app to keep your todo list checked
