@@ -33,4 +33,9 @@ enum TASK: String {
 }
 let SAVING_ERROR_MESSAGE = "Saving Error: "
 let FETCHING_ERROR_MESSAGE = "Fetching Error: "
-let NAME_FILTER_QUERY = "name CONTAINS %@"
+/// Case sensitivity in filter quries
+///
+/// [c] case insensitive: lowercase & uppercase values are treated the same
+///
+/// [d] diacritic insensitive: special characters treated as the base character
+let NAME_FILTER_QUERY = "name CONTAINS[c] %@"
