@@ -147,15 +147,12 @@ extension TodoViewController: UISearchResultsUpdating {
         searchView.clearButtonMode = .never
     }
     
-    // MARK: - UISearchResultsUpdating Delegate
+    // MARK: - UISearchResultsUpdating Delegate Methods
     func updateSearchResults(for searchController: UISearchController) {
         if searchController.isActive {
             viewModel.taskArray.removeAll()
-            searchController.searchBar.showsCancelButton = true
             if let searchText = searchController.searchBar.text, searchText != "" {
                 viewModel.getSearchResult(for: searchText)
-            } else {
-                searchController.searchBar.showsCancelButton = false
             }
         }
         tableView.reloadData()
@@ -164,6 +161,12 @@ extension TodoViewController: UISearchResultsUpdating {
 
 
 extension TodoViewController: UISearchBarDelegate {
+    
+    // MARK: - UISearchBarDelegate Delegate Methods
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchController.searchBar.showsCancelButton = true
+    }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchController.searchBar.showsCancelButton = false
         viewModel.getDataFromDb()
