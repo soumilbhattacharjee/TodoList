@@ -119,12 +119,17 @@ extension TodoViewController: UISearchResultsUpdating {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        searchController.searchBar.delegate = self
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationItem.hidesSearchBarWhenScrolling = true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.searchController.searchBar.endEditing(true)
     }
     
     /* Description: Customizing the searchbar and setting its delegate
@@ -139,16 +144,30 @@ extension TodoViewController: UISearchResultsUpdating {
         definesPresentationContext = true
         searchController.searchResultsUpdater = self
         guard let searchView = searchController.searchBar.value(forKey: "searchField") as? UITextField else {return}
-            searchView.clearButtonMode = .never
+        searchView.clearButtonMode = .never
     }
     
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
         if searchController.isActive {
-            viewModel.getSearchResult(for: searchController.searchBar.text ?? "")
-        } else {
-            viewModel.getDataFromDb()
+            viewModel.taskArray.removeAll()
+            searchController.searchBar.showsCancelButton = true
+            if let searchText = searchController.searchBar.text, searchText != "" {
+                viewModel.getSearchResult(for: searchText)
+            } else {
+                searchController.searchBar.showsCancelButton = false
+            }
         }
+        tableView.reloadData()
+    }
+}
+
+
+extension TodoViewController: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchController.searchBar.showsCancelButton = false
+        viewModel.getDataFromDb()
+        searchBar.resignFirstResponder()
         tableView.reloadData()
     }
 }

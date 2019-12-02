@@ -68,6 +68,8 @@
 				9D7DEF6723642D4100386058 /* ViewModel */,
 				9D7DEF6823642D7000386058 /* SupportingFiles */,
 				9D7DEF5723642BC300386058 /* Assets.xcassets */,
+				9D7DEF5923642BC300386058 /* LaunchScreen.storyboard */,
+				9D7DEF5423642BC200386058 /* Main.storyboard */,
 				9D7DEF5C23642BC300386058 /* Info.plist */,
 			);
 			path = TodoList;
@@ -92,8 +94,6 @@
 		9D7DEF6623642D2800386058 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9D7DEF5923642BC300386058 /* LaunchScreen.storyboard */,
-				9D7DEF5423642BC200386058 /* Main.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
